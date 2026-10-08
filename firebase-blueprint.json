@@ -1,0 +1,170 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with role authentication",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "nama": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["admin", "anggota"] },
+        "anggotaId": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["aktif", "nonaktif"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "nama", "email", "role", "status"]
+    },
+    "Anggota": {
+      "title": "Anggota",
+      "description": "Member profile of MKPS SMP Garut",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nama": { "type": "string", "maxLength": 100 },
+        "nip": { "type": "string", "maxLength": 30 },
+        "email": { "type": "string", "maxLength": 100 },
+        "userId": { "type": "string", "maxLength": 64 },
+        "tanggalBergabung": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "enum": ["aktif", "nonaktif"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["nama", "nip", "status"]
+    },
+    "Iuran": {
+      "title": "Iuran",
+      "description": "Monthly dues transaction record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nomorTransaksi": { "type": "string", "maxLength": 50 },
+        "anggotaId": { "type": "string", "maxLength": 64 },
+        "namaAnggota": { "type": "string", "maxLength": 100 },
+        "nip": { "type": "string", "maxLength": 30 },
+        "bulan": { "type": "number" },
+        "tahun": { "type": "number" },
+        "periode": { "type": "string", "maxLength": 10 },
+        "nominal": { "type": "number" },
+        "tanggalBayar": { "type": "string", "maxLength": 30 },
+        "status": { "type": "string", "enum": ["lunas", "belum_bayar", "dibatalkan"] },
+        "keterangan": { "type": "string", "maxLength": 255 },
+        "createdBy": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["anggotaId", "bulan", "tahun", "nominal", "status"]
+    },
+    "Pemasukan": {
+      "title": "Pemasukan",
+      "description": "Income cash receipt record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nomorTransaksi": { "type": "string", "maxLength": 50 },
+        "tanggal": { "type": "string", "maxLength": 30 },
+        "kategori": { "type": "string", "maxLength": 60 },
+        "sumber": { "type": "string", "maxLength": 100 },
+        "nominal": { "type": "number" },
+        "keterangan": { "type": "string", "maxLength": 255 },
+        "status": { "type": "string", "enum": ["aktif", "dibatalkan"] },
+        "createdBy": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["nomorTransaksi", "tanggal", "kategori", "nominal", "status"]
+    },
+    "Pengeluaran": {
+      "title": "Pengeluaran",
+      "description": "Expense cash disbursement record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "nomorTransaksi": { "type": "string", "maxLength": 50 },
+        "tanggal": { "type": "string", "maxLength": 30 },
+        "kategori": { "type": "string", "maxLength": 60 },
+        "penerima": { "type": "string", "maxLength": 100 },
+        "nominal": { "type": "number" },
+        "keterangan": { "type": "string", "maxLength": 255 },
+        "buktiUrl": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["aktif", "dibatalkan"] },
+        "createdBy": { "type": "string", "maxLength": 64 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["nomorTransaksi", "tanggal", "kategori", "penerima", "nominal", "status"]
+    },
+    "Pengaturan": {
+      "title": "Pengaturan",
+      "description": "Organization and application settings",
+      "type": "object",
+      "properties": {
+        "namaOrganisasi": { "type": "string", "maxLength": 150 },
+        "namaAplikasi": { "type": "string", "maxLength": 150 },
+        "nominalIuran": { "type": "number" },
+        "tahunAktif": { "type": "number" },
+        "logo": { "type": "string", "maxLength": 500 },
+        "alamat": { "type": "string", "maxLength": 255 },
+        "kontak": { "type": "string", "maxLength": 100 },
+        "namaKetua": { "type": "string", "maxLength": 100 },
+        "namaBendahara": { "type": "string", "maxLength": 100 },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["namaOrganisasi", "namaAplikasi", "nominalIuran", "tahunAktif"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Audit trail log record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string", "maxLength": 64 },
+        "namaUser": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "maxLength": 20 },
+        "aktivitas": { "type": "string", "maxLength": 100 },
+        "modul": { "type": "string", "maxLength": 50 },
+        "recordId": { "type": "string", "maxLength": 64 },
+        "detail": { "type": "string", "maxLength": 500 },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["userId", "aktivitas", "modul"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores individual user records and roles"
+    },
+    "/anggota/{anggotaId}": {
+      "schema": "Anggota",
+      "description": "Stores MKPS member data"
+    },
+    "/iuran/{iuranId}": {
+      "schema": "Iuran",
+      "description": "Monthly dues records for members"
+    },
+    "/pemasukan/{pemasukanId}": {
+      "schema": "Pemasukan",
+      "description": "Income records for cash book"
+    },
+    "/pengeluaran/{pengeluaranId}": {
+      "schema": "Pengeluaran",
+      "description": "Expense records for cash book"
+    },
+    "/pengaturan/{settingId}": {
+      "schema": "Pengaturan",
+      "description": "System configuration parameters"
+    },
+    "/activity_logs/{logId}": {
+      "schema": "ActivityLog",
+      "description": "Audit trail logs for tracking system actions"
+    },
+    "/admins/{adminUid}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "Trusted admin whitelist records"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Sistem Keuangan Iuran MKPS SMP Garut",
+  "description": "Sistem Keuangan Iuran MKPS SMP Kabupaten Garut - Pengelolaan iuran, kas, laporan keuangan, dan keanggotaan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

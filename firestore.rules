@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isSuperAdminEmail() {
+      return isSignedIn() && request.auth.token.email == "asepf16@guru.smp.belajar.id";
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        isSuperAdminEmail() ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /admins/{adminUid} {
+      allow read: if isSignedIn();
+      allow write: if isSuperAdminEmail();
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && (isOwner(userId) || isAdmin());
+      allow create: if isSignedIn() && (isOwner(userId) || isAdmin());
+      allow update: if isSignedIn() && (isOwner(userId) || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    match /anggota/{anggotaId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /iuran/{iuranId} {
+      allow read: if isSignedIn() && (
+        isAdmin() ||
+        (resource.data.anggotaId != null &&
+         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.anggotaId == resource.data.anggotaId)
+      );
+      allow write: if isAdmin();
+    }
+
+    match /pemasukan/{pemasukanId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /pengeluaran/{pengeluaranId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /pengaturan/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /activity_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+    }
+  }
+}
